@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sayali, one question</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#2a0f2e; --bg2:#4a1942; --rose:#ff5d8f; --gold:#ffd27a; --text:#fff3f6;
+  }
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{
+    font-family:'Nunito',system-ui,sans-serif; color:var(--text);
+    background:radial-gradient(circle at 50% 20%,var(--bg2),var(--bg) 70%);
+    overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+  .heart{position:absolute;bottom:-40px;color:var(--rose);opacity:.5;animation:rise linear infinite}
+  @keyframes rise{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+
+  .card{position:relative;z-index:2;padding:24px;max-width:560px;width:100%}
+  .screen{display:none}
+  .screen.on{display:block;animation:fade .9s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.6rem,9vw,4.6rem);line-height:1.05;font-weight:700}
+  h1 em{color:var(--gold)}
+  p{margin:18px auto 0;font-size:1.1rem;line-height:1.7;max-width:44ch;color:#f3d6df}
+  .big{font-size:4rem;margin-bottom:8px}
+
+  .btns{margin-top:36px;display:flex;gap:16px;justify-content:center;align-items:center;min-height:64px}
+  button{
+    font:600 1.1rem 'Nunito',sans-serif;border:0;border-radius:999px;padding:14px 34px;cursor:pointer;
+    transition:transform .2s;
+  }
+  button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .yes{background:var(--rose);color:#fff;box-shadow:0 8px 24px rgba(255,93,143,.45)}
+  .yes:hover{transform:scale(1.08)}
+  .no{background:transparent;color:var(--text);border:1.5px solid #f3d6df66}
+  .next{background:var(--gold);color:#3a1236;margin-top:32px}
+  .hint{margin-top:22px;font-size:.9rem;opacity:.7;min-height:1.4em}
+  @media (prefers-reduced-motion:reduce){.heart{display:none}.screen.on{animation:none}}
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts" aria-hidden="true"></div>
+
+<main class="card">
+  <section class="screen on" id="s1">
+    <div class="big">💌</div>
+    <h1>Hi <em>Sayali</em>,<br>I have something to tell you.</h1>
+    <p>It took me a long time to find the courage. Please read till the end.</p>
+    <button class="next" onclick="go('s2')">Okay, tell me</button>
+  </section>
+
+  <section class="screen" id="s2">
+    <h1>Every day with you<br>feels a little brighter.</h1>
+    <p>Your smile, the way you talk, the way you make ordinary days feel special. I didn't plan to notice all of it, but I did.</p>
+    <button class="next" onclick="go('s3')">Go on</button>
+  </section>
+
+  <section class="screen" id="s3">
+    <div class="big">🌹</div>
+    <h1>Sayali,<br>will you be mine?</h1>
+    <div class="btns" id="btns">
+      <button class="yes" id="yes">Yes 💖</button>
+      <button class="no" id="no">No</button>
+    </div>
+    <div class="hint" id="hint"></div>
+  </section>
+
+  <section class="screen" id="s4">
+    <div class="big">🎉</div>
+    <h1>You said <em>yes!</em></h1>
+    <p>You just made me the happiest person in the world. Thank you, Sayali. Let's go for chai soon. ☕</p>
+  </section>
+</main>
+
+<script>
+  // Floating hearts
+  const box=document.getElementById('hearts');
+  for(let i=0;i<22;i++){
+    const h=document.createElement('span');
+    h.className='heart';h.textContent='♥';
+    h.style.left=Math.random()*100+'%';
+    h.style.fontSize=(14+Math.random()*26)+'px';
+    h.style.animationDuration=(7+Math.random()*9)+'s';
+    h.style.animationDelay=(-Math.random()*12)+'s';
+    box.appendChild(h);
+  }
+
+  function go(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+    document.getElementById(id).classList.add('on');
+  }
+
+  const yes=document.getElementById('yes'), no=document.getElementById('no'), hint=document.getElementById('hint');
+  const msgs=["Are you sure? 🥺","Think again...","Please? 🌷","That button is broken 😅","Try the other one 💖"];
+  let tries=0, scale=1;
+
+  function dodge(e){
+    if(e) e.preventDefault();
+    tries++;
+    hint.textContent=msgs[Math.min(tries-1,msgs.length-1)];
+    scale=Math.min(scale+0.25,2.4);
+    yes.style.transform='scale('+scale+')';
+    no.style.position='fixed';
+    const x=Math.random()*(innerWidth-no.offsetWidth-20)+10;
+    const y=Math.random()*(innerHeight-no.offsetHeight-20)+10;
+    no.style.left=x+'px'; no.style.top=y+'px';
+  }
+  no.addEventListener('mouseover',dodge);
+  no.addEventListener('touchstart',dodge,{passive:false});
+  no.addEventListener('click',dodge);
+
+  yes.addEventListener('click',()=>{
+    go('s4');
+    for(let i=0;i<40;i++){
+      const h=document.createElement('span');
+      h.className='heart';h.textContent=['💖','💗','🌸','✨'][i%4];
+      h.style.left=Math.random()*100+'%';h.style.opacity=.9;
+      h.style.fontSize=(20+Math.random()*30)+'px';
+      h.style.animationDuration=(3+Math.random()*4)+'s';
+      box.appendChild(h);
+    }
+  });
+</script>
+</body>
+</html>
