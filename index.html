@@ -2,130 +2,194 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sayali, one question</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#240b26">
+<title>Sayali, this is for you</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#2a0f2e; --bg2:#4a1942; --rose:#ff5d8f; --gold:#ffd27a; --text:#fff3f6;
+    --wine:#240b26; --plum:#4b1a48; --rose:#ff6b98; --gold:#ffd98a; --petal:#ffe9ef; --soft:#e9c3d0;
   }
-  *{box-sizing:border-box;margin:0}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{
-    font-family:'Nunito',system-ui,sans-serif; color:var(--text);
-    background:radial-gradient(circle at 50% 20%,var(--bg2),var(--bg) 70%);
-    overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center;
+    font-family:'Nunito',system-ui,sans-serif;color:var(--petal);
+    background:radial-gradient(120% 80% at 50% 0%,var(--plum),var(--wine) 65%);
+    overflow:hidden;
   }
-  .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-  .heart{position:absolute;bottom:-40px;color:var(--rose);opacity:.5;animation:rise linear infinite}
-  @keyframes rise{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+  #floaters{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+  .fl{position:absolute;bottom:-50px;color:var(--rose);opacity:.35;animation:up linear infinite}
+  @keyframes up{to{transform:translateY(-115vh) rotate(20deg);opacity:0}}
 
-  .card{position:relative;z-index:2;padding:24px;max-width:560px;width:100%}
-  .screen{display:none}
-  .screen.on{display:block;animation:fade .9s ease}
-  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  /* story progress */
+  #bars{position:fixed;top:0;left:0;right:0;display:flex;gap:4px;
+    padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 0;z-index:5}
+  #bars i{flex:1;height:3px;border-radius:3px;background:#ffffff28;overflow:hidden}
+  #bars i b{display:block;height:100%;width:0;background:var(--gold);transition:width .4s}
+  #bars i.done b{width:100%}
 
-  h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.6rem,9vw,4.6rem);line-height:1.05;font-weight:700}
-  h1 em{color:var(--gold)}
-  p{margin:18px auto 0;font-size:1.1rem;line-height:1.7;max-width:44ch;color:#f3d6df}
-  .big{font-size:4rem;margin-bottom:8px}
-
-  .btns{margin-top:36px;display:flex;gap:16px;justify-content:center;align-items:center;min-height:64px}
-  button{
-    font:600 1.1rem 'Nunito',sans-serif;border:0;border-radius:999px;padding:14px 34px;cursor:pointer;
-    transition:transform .2s;
+  /* slides */
+  #stage{position:relative;height:100%;width:100%}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:calc(env(safe-area-inset-top,0px) + 56px) 26px calc(env(safe-area-inset-bottom,0px) + 100px);
+    overflow-y:auto;
   }
+  .slide.on{display:flex}
+  .emoji{font-size:3.4rem;margin-bottom:14px;animation:beat 1.6s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.1rem,9.5vw,3.2rem);line-height:1.12;font-weight:700}
+  h1 em{color:var(--gold);font-style:italic}
+  .line{max-width:34ch;margin-top:16px;font-size:1.06rem;line-height:1.75;color:var(--soft)}
+  .line b{color:var(--gold);font-weight:600}
+  .r{opacity:0;transform:translateY(10px);transition:opacity .8s,transform .8s}
+  .on .r{opacity:1;transform:none}
+
+  ul.list{list-style:none;margin-top:22px;width:100%;max-width:340px;text-align:left}
+  ul.list li{
+    display:flex;gap:12px;align-items:flex-start;padding:12px 14px;margin-bottom:10px;
+    background:#ffffff10;border-left:3px solid var(--rose);border-radius:0 12px 12px 0;
+    font-size:1rem;line-height:1.5;
+  }
+  ul.list li span{font-size:1.25rem}
+
+  .letter{
+    margin-top:18px;max-width:340px;text-align:left;padding:22px 20px;border-radius:14px;
+    background:var(--petal);color:#3a1236;font-family:'Cormorant Garamond',Georgia,serif;
+    font-size:1.2rem;line-height:1.65;font-weight:600;box-shadow:0 14px 40px #0006;
+  }
+  .letter p{margin-bottom:12px}
+  .letter .sig{text-align:right;color:#a3305f;margin:0;font-style:italic}
+
+  .photo{width:170px;height:170px;border-radius:50%;object-fit:cover;border:4px solid var(--gold);margin-bottom:18px;box-shadow:0 10px 30px #0006}
+
+  /* controls */
+  #nav{position:fixed;left:0;right:0;bottom:0;padding:14px 20px calc(env(safe-area-inset-bottom,0px) + 18px);
+    display:flex;justify-content:space-between;align-items:center;z-index:5}
+  button{font:700 1.05rem 'Nunito',sans-serif;border:0;border-radius:999px;cursor:pointer;min-height:50px}
   button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-  .yes{background:var(--rose);color:#fff;box-shadow:0 8px 24px rgba(255,93,143,.45)}
-  .yes:hover{transform:scale(1.08)}
-  .no{background:transparent;color:var(--text);border:1.5px solid #f3d6df66}
-  .next{background:var(--gold);color:#3a1236;margin-top:32px}
-  .hint{margin-top:22px;font-size:.9rem;opacity:.7;min-height:1.4em}
-  @media (prefers-reduced-motion:reduce){.heart{display:none}.screen.on{animation:none}}
+  #next{background:var(--gold);color:#3a1236;padding:0 30px;margin-left:auto}
+  #back{background:transparent;color:var(--soft);padding:0 16px}
+  #nav.hide{display:none}
+
+  .qbtns{margin-top:32px;display:flex;gap:18px;justify-content:center;align-items:center;min-height:70px;flex-wrap:wrap}
+  #yes{background:var(--rose);color:#fff;padding:0 36px;box-shadow:0 8px 26px #ff6b9870;transition:transform .25s}
+  #no{background:transparent;color:var(--petal);border:1.5px solid #ffe9ef55;padding:0 28px}
+  #hint{margin-top:16px;min-height:1.5em;font-size:.95rem;color:var(--gold)}
+
+  @media (prefers-reduced-motion:reduce){.fl{display:none}.emoji{animation:none}.r{transition:none}}
+  @media (min-width:700px){#stage,#bars,#nav{max-width:460px;margin:0 auto}#nav,#bars{left:50%;transform:translateX(-50%);right:auto;width:460px}}
 </style>
 </head>
 <body>
-<div class="hearts" id="hearts" aria-hidden="true"></div>
-
-<main class="card">
-  <section class="screen on" id="s1">
-    <div class="big">💌</div>
-    <h1>Hi <em>Sayali</em>,<br>I have something to tell you.</h1>
-    <p>It took me a long time to find the courage. Please read till the end.</p>
-    <button class="next" onclick="go('s2')">Okay, tell me</button>
-  </section>
-
-  <section class="screen" id="s2">
-    <h1>Every day with you<br>feels a little brighter.</h1>
-    <p>Your smile, the way you talk, the way you make ordinary days feel special. I didn't plan to notice all of it, but I did.</p>
-    <button class="next" onclick="go('s3')">Go on</button>
-  </section>
-
-  <section class="screen" id="s3">
-    <div class="big">🌹</div>
-    <h1>Sayali,<br>will you be mine?</h1>
-    <div class="btns" id="btns">
-      <button class="yes" id="yes">Yes 💖</button>
-      <button class="no" id="no">No</button>
-    </div>
-    <div class="hint" id="hint"></div>
-  </section>
-
-  <section class="screen" id="s4">
-    <div class="big">🎉</div>
-    <h1>You said <em>yes!</em></h1>
-    <p>You just made me the happiest person in the world. Thank you, Sayali. Let's go for chai soon. ☕</p>
-  </section>
-</main>
+<div id="floaters" aria-hidden="true"></div>
+<div id="bars" aria-hidden="true"></div>
+<div id="stage"></div>
+<div id="nav"><button id="back" aria-label="Go back">Back</button><button id="next">Next</button></div>
 
 <script>
-  // Floating hearts
-  const box=document.getElementById('hearts');
-  for(let i=0;i<22;i++){
-    const h=document.createElement('span');
-    h.className='heart';h.textContent='♥';
-    h.style.left=Math.random()*100+'%';
-    h.style.fontSize=(14+Math.random()*26)+'px';
-    h.style.animationDuration=(7+Math.random()*9)+'s';
-    h.style.animationDelay=(-Math.random()*12)+'s';
-    box.appendChild(h);
-  }
+/* ===== EDIT YOUR TEXT HERE =====
+   Change the words inside the quotes. Keep the commas and quote marks.
+   MY_NAME is how you sign the letter. PHOTO can be a photo file name
+   (upload it next to index.html) or leave it empty "". */
+const HER = "Sayali";
+const MY_NAME = "Om";
+const PHOTO = "";
 
-  function go(id){
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
-    document.getElementById(id).classList.add('on');
-  }
+const slides = [
+  { emoji:"💌", title:`Hi <em>${HER}</em>,`,
+    lines:["I made this just for you.","Please take a minute and read it slowly. It comes straight from my heart."] },
 
-  const yes=document.getElementById('yes'), no=document.getElementById('no'), hint=document.getElementById('hint');
-  const msgs=["Are you sure? 🥺","Think again...","Please? 🌷","That button is broken 😅","Try the other one 💖"];
-  let tries=0, scale=1;
+  { emoji:"🌤️", title:"I remember the first time I noticed you.",
+    lines:["It was a normal day. Nothing special was planned.","Then you smiled, and somehow the whole day became <b>special</b>.","I didn't understand it then. I do now."] },
 
-  function dodge(e){
-    if(e) e.preventDefault();
-    tries++;
-    hint.textContent=msgs[Math.min(tries-1,msgs.length-1)];
-    scale=Math.min(scale+0.25,2.4);
-    yes.style.transform='scale('+scale+')';
-    no.style.position='fixed';
-    const x=Math.random()*(innerWidth-no.offsetWidth-20)+10;
-    const y=Math.random()*(innerHeight-no.offsetHeight-20)+10;
-    no.style.left=x+'px'; no.style.top=y+'px';
-  }
-  no.addEventListener('mouseover',dodge);
-  no.addEventListener('touchstart',dodge,{passive:false});
-  no.addEventListener('click',dodge);
+  { emoji:"✨", title:"Things I love about you",
+    list:[["😊","Your smile that fixes a bad day without even trying."],
+          ["🌷","The kind way you treat everyone around you."],
+          ["🎧","How easy it is to talk to you about anything."],
+          ["💛","The little things you do without expecting anything back."]] },
 
-  yes.addEventListener('click',()=>{
-    go('s4');
-    for(let i=0;i<40;i++){
-      const h=document.createElement('span');
-      h.className='heart';h.textContent=['💖','💗','🌸','✨'][i%4];
-      h.style.left=Math.random()*100+'%';h.style.opacity=.9;
-      h.style.fontSize=(20+Math.random()*30)+'px';
-      h.style.animationDuration=(3+Math.random()*4)+'s';
-      box.appendChild(h);
-    }
-  });
+  { emoji:"🌙", title:"Some days I think of you more than I admit.",
+    lines:["In class, on the way home, in the quiet moments before sleep.","You became a part of my day, and I never want to lose that."] },
+
+  { emoji:"📝", title:"A small letter",
+    letter:["Dear Sayali,","I am not good with big filmy words, so I will say it simply. You are one of the best things that happened to me.",
+            "I am not asking you to change anything. I only want to walk beside you, laugh with you, and be there on your good days and your hard days.",
+            "Whatever your answer is, I respect you and I am grateful to know you."] },
+
+  { emoji:"🤞", title:"So here is my heart,<br>in one question.",
+    lines:["I am nervous, but I would rather be honest than stay quiet."] },
+
+  { question:true, emoji:"🌹", title:`${HER},<br>will you be <em>mine?</em>` },
+
+  { end:true, emoji:"🎉", title:`You said <em>yes!</em>`,
+    lines:["I am smiling so much right now.","Thank you for trusting me, Sayali. I promise to always respect you, support you and make you feel special.","Now, when are we having that <b>chai</b>? ☕"] }
+];
+
+const stage=document.getElementById('stage'), bars=document.getElementById('bars'),
+      nav=document.getElementById('nav'), nextB=document.getElementById('next'), backB=document.getElementById('back');
+let cur=0;
+
+/* build slides */
+slides.forEach((s,i)=>{
+  const d=document.createElement('section'); d.className='slide';
+  let h='';
+  if(i===1 && PHOTO) h+=`<img class="photo r" src="${PHOTO}" alt="">`;
+  h+=`<div class="emoji r">${s.emoji}</div><h1 class="r">${s.title}</h1>`;
+  if(s.lines) h+=s.lines.map((t,k)=>`<p class="line r" style="transition-delay:${.5+k*.7}s">${t}</p>`).join('');
+  if(s.list) h+=`<ul class="list">`+s.list.map((x,k)=>`<li class="r" style="transition-delay:${.4+k*.6}s"><span>${x[0]}</span>${x[1]}</li>`).join('')+`</ul>`;
+  if(s.letter) h+=`<div class="letter r" style="transition-delay:.4s">`+s.letter.map(p=>`<p>${p}</p>`).join('')+`<p class="sig">With love,<br>${MY_NAME}</p></div>`;
+  if(s.question) h+=`<div class="qbtns r" style="transition-delay:.6s"><button id="yes">Yes 💖</button><button id="no">No</button></div><div id="hint"></div>`;
+  d.innerHTML=h; stage.appendChild(d);
+  const b=document.createElement('i'); b.innerHTML='<b></b>'; bars.appendChild(b);
+});
+const els=[...document.querySelectorAll('.slide')], pips=[...bars.children];
+
+function show(n){
+  cur=Math.max(0,Math.min(slides.length-1,n));
+  els.forEach((e,i)=>e.classList.toggle('on',i===cur));
+  pips.forEach((p,i)=>p.classList.toggle('done',i<=cur));
+  const s=slides[cur];
+  backB.style.visibility=(cur===0||s.end)?'hidden':'visible';
+  nav.classList.toggle('hide',!!s.question||!!s.end);
+  nextB.textContent=cur===0?'Open it 💌':(cur===slides.length-3?'I am ready':'Next');
+  els[cur].scrollTop=0;
+}
+nextB.onclick=()=>show(cur+1);
+backB.onclick=()=>show(cur-1);
+
+/* floating hearts */
+const fbox=document.getElementById('floaters');
+function heart(ch,big){
+  const h=document.createElement('span');h.className='fl';h.textContent=ch;
+  h.style.left=Math.random()*100+'%';
+  h.style.fontSize=(big?22+Math.random()*30:12+Math.random()*22)+'px';
+  h.style.animationDuration=(big?3+Math.random()*4:8+Math.random()*9)+'s';
+  if(!big)h.style.animationDelay=(-Math.random()*14)+'s'; else h.style.opacity=.95;
+  fbox.appendChild(h);
+}
+for(let i=0;i<18;i++)heart('♥');
+
+/* the question */
+const yes=document.getElementById('yes'), no=document.getElementById('no'), hint=document.getElementById('hint');
+const msgs=["Are you sure? 🥺","Please think again...","I made this whole website for you 😅","The Yes button is looking lonely 💖","Okay, just tap Yes 🌷"];
+let tries=0,sc=1;
+function dodge(e){
+  e.preventDefault(); tries++;
+  hint.textContent=msgs[Math.min(tries-1,msgs.length-1)];
+  sc=Math.min(sc+.22,2.2); yes.style.transform=`scale(${sc})`;
+  no.style.position='fixed';
+  no.style.left=(12+Math.random()*(innerWidth-no.offsetWidth-24))+'px';
+  no.style.top=(90+Math.random()*(innerHeight-no.offsetHeight-180))+'px';
+  if(tries>3) no.style.transform=`scale(${Math.max(.6,1-tries*.07)})`;
+}
+['mouseover','touchstart','click'].forEach(ev=>no.addEventListener(ev,dodge,{passive:false}));
+yes.onclick=()=>{
+  show(cur+1);
+  for(let i=0;i<45;i++)setTimeout(()=>heart(['💖','💗','🌸','✨','🌹'][i%5],true),i*70);
+};
+
+show(0);
 </script>
 </body>
 </html>
